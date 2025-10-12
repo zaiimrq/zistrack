@@ -6,4 +6,3 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::view('dashboard', 'dashboard.index')->name('dashboard');
