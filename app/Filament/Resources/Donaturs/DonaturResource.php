@@ -5,7 +5,6 @@ namespace App\Filament\Resources\Donaturs;
 use App\Filament\Resources\Donaturs\Pages\CreateDonatur;
 use App\Filament\Resources\Donaturs\Pages\EditDonatur;
 use App\Filament\Resources\Donaturs\Pages\ListDonaturs;
-use App\Filament\Resources\Donaturs\Pages\ViewDonatur;
 use App\Filament\Resources\Donaturs\Schemas\DonaturForm;
 use App\Filament\Resources\Donaturs\Schemas\DonaturInfolist;
 use App\Filament\Resources\Donaturs\Tables\DonatursTable;
@@ -51,7 +50,6 @@ class DonaturResource extends Resource
         return [
             'index' => ListDonaturs::route('/'),
             'create' => CreateDonatur::route('/create'),
-            'view' => ViewDonatur::route('/{record}'),
             'edit' => EditDonatur::route('/{record}/edit'),
         ];
     }

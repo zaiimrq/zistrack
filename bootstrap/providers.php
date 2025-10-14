@@ -2,5 +2,5 @@
 
 return [
     App\Providers\AppServiceProvider::class,
-    App\Providers\Filament\DashoardPanelProvider::class,
+    App\Providers\Filament\DashboardPanelProvider::class,
 ];

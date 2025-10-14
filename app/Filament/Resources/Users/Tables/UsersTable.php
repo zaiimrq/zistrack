@@ -17,11 +17,17 @@ class UsersTable
                 TextColumn::make('google_id')
                     ->searchable(),
                 TextColumn::make('name')
-                    ->searchable(),
+                    ->searchable()
+                    ->icon('heroicon-o-user')
+                    ->description(fn ($record) => $record->email)
+                    ->color('primary'),
                 TextColumn::make('email')
                     ->label('Email address')
-                    ->searchable(),
+                    ->searchable()
+                    ->color('info'),
                 TextColumn::make('role')
+                    ->badge()
+                    ->color(fn ($state) => $state === 'admin' ? 'success' : 'warning')
                     ->searchable(),
             ])
             ->filters([

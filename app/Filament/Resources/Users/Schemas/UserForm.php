@@ -11,19 +11,25 @@ class UserForm
     {
         return $schema
             ->components([
-                TextInput::make('google_id'),
+                TextInput::make('google_id')
+                    ->placeholder('Google ID'),
                 TextInput::make('name')
-                    ->required(),
+                    ->required()
+                    ->placeholder('Nama lengkap'),
                 TextInput::make('email')
                     ->label('Email address')
                     ->email()
-                    ->required(),
+                    ->required()
+                    ->placeholder('Alamat email')
+                    ->helperText('Masukkan email aktif'),
                 TextInput::make('password')
                     ->password()
-                    ->required(),
+                    ->required()
+                    ->placeholder('Password minimal 8 karakter'),
                 TextInput::make('role')
                     ->required()
-                    ->default('user'),
+                    ->default('user')
+                    ->placeholder('Role user'),
             ]);
     }
 }

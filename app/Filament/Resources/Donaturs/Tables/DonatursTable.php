@@ -16,13 +16,19 @@ class DonatursTable
         return $table
             ->columns([
                 TextColumn::make('user.name')
+                    ->badge()
+                    ->color('primary')
                     ->searchable(),
                 TextColumn::make('name')
-                    ->searchable(),
+                    ->searchable()
+                    ->icon('heroicon-o-user'),
                 TextColumn::make('phone')
                     ->numeric()
+                    ->color('info')
                     ->sortable(),
                 TextColumn::make('address')
+                    ->badge()
+                    ->color('warning')
                     ->searchable(),
             ])
             ->filters([

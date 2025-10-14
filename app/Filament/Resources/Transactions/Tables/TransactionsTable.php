@@ -16,17 +16,27 @@ class TransactionsTable
         return $table
             ->columns([
                 TextColumn::make('donatur.name')
+                    ->badge()
+                    ->color('primary')
                     ->searchable(),
                 TextColumn::make('user.name')
+                    ->badge()
+                    ->color('info')
                     ->searchable(),
                 TextColumn::make('amount')
                     ->numeric()
+                    ->color('success')
                     ->sortable(),
                 TextColumn::make('type')
                     ->badge()
+                    ->color(fn ($state) => $state === 'infak-kotak' ? 'success' : 'warning')
                     ->searchable(),
                 TextColumn::make('proof_file')
-                    ->searchable(),
+                    ->label('Proof')
+                    ->url(fn ($record) => $record->proof_file)
+                    ->openUrlInNewTab()
+                    ->icon('heroicon-o-photo')
+                    ->color('primary'),
                 TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()

@@ -19,14 +19,18 @@ use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
 
-class DashoardPanelProvider extends PanelProvider
+class DashboardPanelProvider extends PanelProvider
 {
     public function panel(Panel $panel): Panel
     {
         return $panel
+            ->spa()
+            ->databaseTransactions()
+            ->unsavedChangesAlerts()
+            ->topNavigation()
             ->default()
-            ->id('dashoard')
-            ->path('dashoard')
+            ->id('dashboard')
+            ->path('dashboard')
             ->login()
             ->colors([
                 'primary' => Color::Amber,

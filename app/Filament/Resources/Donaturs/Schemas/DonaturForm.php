@@ -14,14 +14,18 @@ class DonaturForm
             ->components([
                 Select::make('user_id')
                     ->relationship('user', 'name')
-                    ->required(),
+                    ->required()
+                    ->placeholder('Pilih user'),
                 TextInput::make('name')
-                    ->required(),
+                    ->required()
+                    ->placeholder('Nama donatur'),
                 TextInput::make('phone')
                     ->tel()
-                    ->numeric(),
+                    ->numeric()
+                    ->placeholder('Nomor telepon'),
                 TextInput::make('address')
-                    ->required(),
+                    ->required()
+                    ->placeholder('Alamat lengkap'),
             ]);
     }
 }
