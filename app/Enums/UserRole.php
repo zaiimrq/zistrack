@@ -2,7 +2,10 @@
 
 namespace App\Enums;
 
-enum UserRole: string
+use Filament\Support\Contracts\HasLabel;
+
+
+enum UserRole: string implements HasLabel
 {
     case ADMIN = 'admin';
     case USER = 'user';
@@ -11,7 +14,7 @@ enum UserRole: string
     public function getLabel(): string
     {
         return match ($this) {
-            UserRole::ADMIN => 'Administrator',
+            UserRole::ADMIN => 'Admin',
             UserRole::USER => 'User',
             UserRole::LEADER => 'Leader',
         };

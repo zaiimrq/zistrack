@@ -14,12 +14,9 @@ class UsersTable
     {
         return $table
             ->columns([
-                TextColumn::make('google_id')
-                    ->searchable(),
                 TextColumn::make('name')
                     ->searchable()
                     ->icon('heroicon-o-user')
-                    ->description(fn ($record) => $record->email)
                     ->color('primary'),
                 TextColumn::make('email')
                     ->label('Email address')

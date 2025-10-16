@@ -2,8 +2,10 @@
 
 namespace App\Filament\Resources\Users\Schemas;
 
-use Filament\Forms\Components\TextInput;
+use App\Enums\UserRole;
 use Filament\Schemas\Schema;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\TextInput;
 
 class UserForm
 {
@@ -11,8 +13,6 @@ class UserForm
     {
         return $schema
             ->components([
-                TextInput::make('google_id')
-                    ->placeholder('Google ID'),
                 TextInput::make('name')
                     ->required()
                     ->placeholder('Nama lengkap'),
@@ -26,7 +26,9 @@ class UserForm
                     ->password()
                     ->required()
                     ->placeholder('Password minimal 8 karakter'),
-                TextInput::make('role')
+                Select::make('role')
+                    ->options(UserRole::class)
+                    ->native(false)
                     ->required()
                     ->default('user')
                     ->placeholder('Role user'),
