@@ -4,7 +4,6 @@ namespace App\Enums;
 
 use Filament\Support\Contracts\HasLabel;
 
-
 enum UserRole: string implements HasLabel
 {
     case ADMIN = 'admin';

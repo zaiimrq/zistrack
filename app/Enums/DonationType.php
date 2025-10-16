@@ -2,18 +2,20 @@
 
 namespace App\Enums;
 
-enum DonationType: string
+use Filament\Support\Contracts\HasLabel;
+
+enum DonationType: string implements HasLabel
 {
-    case INFAK_RUTIN = 'infak-rutin';
-    case INFAK_KOTAK = 'infak-kotak';
-    case INFAK_KALENG = 'infak-kaleng';
+    case ZAKAT = 'zakat';
+    case INFAK_UMUM = 'infak-umum';
+    case INFAK_KHUSUS = 'infak-khusus';
 
     public function getLabel(): string
     {
         return match ($this) {
-            DonationType::INFAK_RUTIN => 'Infak Rutin',
-            DonationType::INFAK_KOTAK => 'Infak Kotak',
-            DonationType::INFAK_KALENG => 'Infak Kaleng',
+            DonationType::ZAKAT => 'Zakat',
+            DonationType::INFAK_UMUM => 'Infak Umum',
+            DonationType::INFAK_KHUSUS => 'Infak Khusus',
         };
     }
 }
