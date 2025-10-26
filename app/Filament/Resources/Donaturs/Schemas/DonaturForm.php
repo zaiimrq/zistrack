@@ -24,8 +24,7 @@ class DonaturForm
                             ->native(false)
                             ->required()
                             ->placeholder('Pilih user')
-                            ->hidden(! Auth::user()->isAdmin())
-                            ->default(Auth::user()->id),
+                            ->visible(Auth::user()->isAdmin()),
                         Grid::make()
                             ->schema([
                                 TextInput::make('name')
