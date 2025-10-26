@@ -2,9 +2,9 @@
 
 namespace App\Filament\Resources\Donaturs\Pages;
 
-use Illuminate\Support\Facades\Auth;
-use Filament\Resources\Pages\CreateRecord;
 use App\Filament\Resources\Donaturs\DonaturResource;
+use Filament\Resources\Pages\CreateRecord;
+use Illuminate\Support\Facades\Auth;
 
 class CreateDonatur extends CreateRecord
 {
@@ -14,7 +14,7 @@ class CreateDonatur extends CreateRecord
     {
         $user = Auth::user();
 
-        if (! $user->isAdmin()) {
+        if ($user->isUser()) {
             $data['user_id'] = $user->id;
         }
 

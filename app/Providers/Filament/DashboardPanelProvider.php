@@ -29,6 +29,7 @@ class DashboardPanelProvider extends PanelProvider
             ->topNavigation()
             ->maxContentWidth(Width::ScreenLarge)
             ->globalSearch(false)
+            ->breadcrumbs(false)
             ->default()
             ->id('dashboard')
             ->path('dashboard')
