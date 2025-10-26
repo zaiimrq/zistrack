@@ -30,6 +30,7 @@ class DashboardPanelProvider extends PanelProvider
             ->maxContentWidth(Width::ScreenLarge)
             ->globalSearch(false)
             ->breadcrumbs(false)
+            ->viteTheme('resources/css/filament/dashboard/theme.css')
             ->default()
             ->id('dashboard')
             ->path('dashboard')
