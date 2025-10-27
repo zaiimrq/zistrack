@@ -29,6 +29,7 @@ class AppBuild extends Command
         $this->call('clear');
 
         $this->call('optimize');
+        $this->call('filament:optimize');
         $this->info('Application built successfully.');
 
     }

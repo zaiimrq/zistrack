@@ -26,6 +26,7 @@ class AppClear extends Command
     public function handle()
     {
         $this->call('optimize:clear');
+        $this->call('filament:optimize-clear');
         $this->info('Application cache cleared successfully.');
     }
 }
