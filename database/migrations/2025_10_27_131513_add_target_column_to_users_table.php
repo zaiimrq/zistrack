@@ -11,10 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('targets', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('user_id')->constrained()->cascadeOnDelete();
-            $table->integer('value');
+        Schema::dropIfExists('targets');
+        Schema::table('users', function (Blueprint $table) {
+            $table->integer('target')->default(0);
         });
     }
 
@@ -23,6 +22,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('targets');
+        Schema::table('users', function (Blueprint $table) {
+            $table->dropColumn('target');
+        });
     }
 };
