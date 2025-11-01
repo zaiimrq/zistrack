@@ -1,5 +1,5 @@
 import './bootstrap';
-import './index.js'
-import.meta.glob([
-    '../images/**'
-]);
+import ApexCharts from "apexcharts";
+
+window.ApexCharts = ApexCharts;
+

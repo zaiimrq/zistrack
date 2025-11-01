@@ -10,11 +10,14 @@ use Filament\Pages\Dashboard;
 use Filament\Panel;
 use Filament\PanelProvider;
 use Filament\Support\Enums\Width;
+use Filament\Support\Facades\FilamentView;
+use Filament\View\PanelsRenderHook;
 use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
 use Illuminate\Cookie\Middleware\EncryptCookies;
 use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
 use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\StartSession;
+use Illuminate\Support\Facades\Blade;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
 
 class DashboardPanelProvider extends PanelProvider
@@ -28,7 +31,7 @@ class DashboardPanelProvider extends PanelProvider
             ->maxContentWidth(Width::ScreenLarge)
             ->globalSearch(false)
             ->breadcrumbs(false)
-            // ->viteTheme('resources/css/filament/dashboard/theme.css')
+            ->viteTheme('resources/css/filament/dashboard/theme.css')
             ->default()
             ->id('dashboard')
             ->path('dashboard')
@@ -55,6 +58,12 @@ class DashboardPanelProvider extends PanelProvider
             ])
             ->authMiddleware([
                 Authenticate::class,
-            ]);
+            ])
+            ->bootUsing(function () {
+                FilamentView::registerRenderHook(
+                    PanelsRenderHook::HEAD_END,
+                    fn (): string => Blade::render("@vite(['resources/css/app.css', 'resources/js/app.js'])"),
+                );
+            });
     }
 }

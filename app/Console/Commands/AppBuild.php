@@ -32,5 +32,11 @@ class AppBuild extends Command
         $this->call('filament:optimize');
         $this->info('Application built successfully.');
 
+        exec('npm run build', $output, $returnVar);
+        if ($returnVar === 0) {
+            $this->info('npm run build executed successfully.');
+        } else {
+            $this->error('npm run build failed.');
+        }
     }
 }

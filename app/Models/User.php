@@ -3,6 +3,7 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;use App\Enums\UserRole;
+use App\Enums\UserRole;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
@@ -41,11 +42,6 @@ class User extends Authenticatable
     public function isUser(): bool
     {
         return $this->role === UserRole::USER;
-    }
-
-    public function isLeader(): bool
-    {
-        return $this->role === UserRole::LEADER;
     }
 
     public function donaturs(): HasMany

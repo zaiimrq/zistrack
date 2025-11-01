@@ -1,3 +1,3 @@
 <x-filament-panels::page>
-    <h1>Testing</h1>
+    <livewire:indicator/>
 </x-filament-panels::page>

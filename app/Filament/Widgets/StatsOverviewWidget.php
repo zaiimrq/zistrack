@@ -6,41 +6,65 @@ use App\Models\Transaction;
 use App\Models\User;
 use Filament\Widgets\StatsOverviewWidget as BaseStatsOverviewWidget;
 use Filament\Widgets\StatsOverviewWidget\Stat;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Number;
 
 class StatsOverviewWidget extends BaseStatsOverviewWidget
 {
+    protected static bool $isLazy = false;
+
+    public function getColumns(): int|array
+    {
+        return 2;
+    }
+
     protected function getStats(): array
     {
         $user = Auth::user();
+        $query = Transaction::query()->withUser($user->isUser() ? $user : null);
+        $thisMonthIncome = $query->thisMonth()->sum('amount');
+        $lastMonthIncome = $query->lastMonth()->sum('amount');
 
         return [
-            $this->renderIncomeStat($user),
-            $this->renderTargetStat($user),
+            $this->renderIncomeStat(
+                thisMonthIncome: $thisMonthIncome,
+                lastMonthIncome: $lastMonthIncome
+            ),
+            $this->renderTargetStat(
+                user: $user,
+                thisMonthIncome: $thisMonthIncome
+            ),
         ];
     }
 
-    private function renderIncomeStat(User $user): Stat
+    private function renderIncomeStat(int $thisMonthIncome, int $lastMonthIncome): Stat
     {
-        $income = Transaction::query()
-            ->whereMonth('created_at', now()->month)
-            ->when($user->isUser(), fn (Builder $query) => $query->whereUserId($user->id))
-            ->sum('amount');
 
-        return Stat::make('Income', $this->formatCurrency($income))
+        $icon = $thisMonthIncome >= $lastMonthIncome
+             ? 'heroicon-m-arrow-trending-up'
+             : 'heroicon-m-arrow-trending-down';
+
+        $color = $thisMonthIncome >= $lastMonthIncome
+                ? 'success'
+                : 'danger';
+
+        return Stat::make('Income', $this->formatCurrency($thisMonthIncome))
             ->label('Total Income')
+            ->color($color)
             ->description('Since last month')
-            ->descriptionIcon('heroicon-m-arrow-trending-up');
+            ->descriptionIcon($icon);
     }
 
-    private function renderTargetStat(User $user): Stat
+    private function renderTargetStat(User $user, int $thisMonthIncome): Stat
     {
-        return Stat::make('Target', $this->formatCurrency($user->target))
+        $target = $user->isAdmin()
+                    ? User::query()->sum('target')
+                    : $user->target;
+
+        return Stat::make('Target', $this->formatCurrency($target))
             ->label('Monthly Target')
-            ->description('Updated 2 days ago')
-            ->descriptionIcon('heroicon-m-arrow-trending-up');
+            ->color('primary')
+            ->description('🔥 Chase your target');
     }
 
     private function formatCurrency(int $amount): string
