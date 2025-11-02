@@ -1,3 +1,3 @@
 <x-filament-panels::page>
-    <livewire:indicator/>
+    {{-- <livewire:indicator/> --}}
 </x-filament-panels::page>

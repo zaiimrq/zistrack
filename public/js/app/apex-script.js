@@ -1,4 +1,6 @@
-import ApexCharts from "apexcharts";
+import ApexScharts from "apexcharts";
+
+console.log(typeof ApexCharts);
 
 let chartTwoInstance = null;
 

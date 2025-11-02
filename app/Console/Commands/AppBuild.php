@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Process;
 
 class AppBuild extends Command
 {
@@ -30,13 +31,17 @@ class AppBuild extends Command
 
         $this->call('optimize');
         $this->call('filament:optimize');
-        $this->info('Application built successfully.');
 
-        exec('npm run build', $output, $returnVar);
-        if ($returnVar === 0) {
-            $this->info('npm run build executed successfully.');
-        } else {
-            $this->error('npm run build failed.');
+        $result = Process::run('npm run build');
+
+        if ($result->failed()) {
+            $this->error('NPM build failed: '.$result->errorOutput());
+
+            return $result->exitCode();
         }
+
+        echo $result->output();
+
+        $this->info('Application built successfully.');
     }
 }

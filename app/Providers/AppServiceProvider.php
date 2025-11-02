@@ -3,6 +3,8 @@
 namespace App\Providers;
 
 use Carbon\CarbonImmutable;
+use Filament\Support\Assets\Js;
+use Filament\Support\Facades\FilamentAsset;
 use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Vite;
@@ -36,5 +38,9 @@ class AppServiceProvider extends ServiceProvider
 
         // DB configuration
         DB::prohibitDestructiveCommands(app()->isProduction());
+
+        FilamentAsset::register([
+            Js::make('apex-script', Vite::asset('resources/js/apex.js'))->module(),
+        ]);
     }
 }

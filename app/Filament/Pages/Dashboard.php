@@ -3,6 +3,8 @@
 namespace App\Filament\Pages;
 
 use App\Filament\Widgets\StatsOverviewWidget;
+use App\Filament\Widgets\TargetIndicatorWidget;
+use App\Filament\Widgets\UserProgessWidget;
 use BackedEnum;
 use Filament\Actions\Action;
 use Filament\Pages\Page;
@@ -27,6 +29,8 @@ class Dashboard extends Page
     {
         return [
             StatsOverviewWidget::class,
+            TargetIndicatorWidget::class,
+            UserProgessWidget::class,
         ];
     }
 }
