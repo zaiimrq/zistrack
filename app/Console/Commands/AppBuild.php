@@ -32,10 +32,10 @@ class AppBuild extends Command
         $this->call("optimize");
         $this->call("filament:optimize");
 
-        $result = Process::run("npm run build");
+        $result = Process::run("yarn run build");
 
         if ($result->failed()) {
-            $this->error("NPM build failed: " . $result->errorOutput());
+            $this->error("Yarn build failed: " . $result->errorOutput());
 
             return $result->exitCode();
         }
