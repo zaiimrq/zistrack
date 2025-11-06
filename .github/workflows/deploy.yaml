@@ -26,7 +26,7 @@ jobs:
 
       - name: Install dependencies
         run: |
-          ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }} "cd ${{ secrets.SSH_PATH }} && ~/bin/php ~/bin/composer install --no-dev --optimize-autoloader && yarn install"
+          ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }} "cd ${{ secrets.SSH_PATH }} && ~/bin/php ~/bin/composer install --no-dev --optimize-autoloader && npm install"
 
       - name: Run migrations
         run: |
