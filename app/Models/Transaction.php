@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use App\Enums\DonationType;
 use Illuminate\Database\Eloquent\Attributes\Scope;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
@@ -10,19 +9,12 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Transaction extends Model
 {
-    protected $fillable = [
-        'donatur_id',
-        'user_id',
-        'amount',
-        'type',
-        'proof_file',
-    ];
+    protected $fillable = ['donatur_id', 'user_id', 'amount', 'proof_file'];
 
     protected function casts(): array
     {
         return [
             'amount' => 'decimal:0',
-            'type' => DonationType::class,
         ];
     }
 

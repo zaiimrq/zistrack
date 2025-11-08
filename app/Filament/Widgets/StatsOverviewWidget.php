@@ -22,31 +22,32 @@ class StatsOverviewWidget extends BaseStatsOverviewWidget
     {
         $user = Auth::user();
         $query = Transaction::query()->withUser($user->isUser() ? $user : null);
-        $thisMonthIncome = $query->thisMonth()->sum('amount');
-        $lastMonthIncome = $query->lastMonth()->sum('amount');
+
+        $thisMonthIncome = $query->clone()->thisMonth()->sum('amount');
+        $lastMonthIncome = $query->clone()->lastMonth()->sum('amount');
 
         return [
             $this->renderIncomeStat(
                 thisMonthIncome: $thisMonthIncome,
-                lastMonthIncome: $lastMonthIncome
+                lastMonthIncome: $lastMonthIncome,
             ),
             $this->renderTargetStat(
                 user: $user,
-                thisMonthIncome: $thisMonthIncome
+                thisMonthIncome: $thisMonthIncome,
             ),
         ];
     }
 
-    private function renderIncomeStat(int $thisMonthIncome, int $lastMonthIncome): Stat
-    {
+    private function renderIncomeStat(
+        int $thisMonthIncome,
+        int $lastMonthIncome,
+    ): Stat {
+        $icon =
+            $thisMonthIncome >= $lastMonthIncome
+                ? 'heroicon-m-arrow-trending-up'
+                : 'heroicon-m-arrow-trending-down';
 
-        $icon = $thisMonthIncome >= $lastMonthIncome
-             ? 'heroicon-m-arrow-trending-up'
-             : 'heroicon-m-arrow-trending-down';
-
-        $color = $thisMonthIncome >= $lastMonthIncome
-                ? 'success'
-                : 'danger';
+        $color = $thisMonthIncome >= $lastMonthIncome ? 'success' : 'danger';
 
         return Stat::make('Income', $this->formatCurrency($thisMonthIncome))
             ->label('Total Income')
@@ -58,8 +59,8 @@ class StatsOverviewWidget extends BaseStatsOverviewWidget
     private function renderTargetStat(User $user, int $thisMonthIncome): Stat
     {
         $target = $user->isAdmin()
-                    ? User::query()->sum('target')
-                    : $user->target;
+            ? User::query()->sum('target')
+            : $user->target;
 
         return Stat::make('Target', $this->formatCurrency($target))
             ->label('Monthly Target')
