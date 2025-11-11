@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Attributes\Scope;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Facades\Storage;
 
 class Transaction extends Model
 {
@@ -44,5 +45,26 @@ class Transaction extends Model
     protected function withUser(Builder $query, ?User $user): void
     {
         $query->when($user, fn ($q) => $q->where('user_id', $user->id));
+    }
+
+    protected static function booted(): void
+    {
+        static::updated(function (Transaction $transaction) {
+            $originalFile = $transaction->getOriginal('proof_file');
+
+            if ($transaction->isDirty('proof_file')) {
+                if (Storage::fileExists($originalFile)) {
+                    Storage::delete($originalFile);
+                }
+            }
+        });
+
+        static::deleted(function (Transaction $transaction) {
+            $originalFile = $transaction->getOriginal('proof_file');
+
+            if (Storage::fileExists($originalFile)) {
+                Storage::delete($originalFile);
+            }
+        });
     }
 }
