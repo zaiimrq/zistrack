@@ -17,7 +17,7 @@ class CreateTransaction extends CreateRecord
         $user = Auth::user();
 
         if ($user->isUser()) {
-            $data["user_id"] = $user->id;
+            $data['user_id'] = $user->id;
         }
 
         return $data;

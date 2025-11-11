@@ -5,58 +5,46 @@ namespace App\Filament\Resources\Transactions\Tables;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
-use Filament\Actions\ViewAction;
+use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
+use Illuminate\Support\Number;
 
 class TransactionsTable
 {
     public static function configure(Table $table): Table
     {
         return $table
+            ->defaultSort('desc')
+            ->searchable(false)
             ->columns([
-                TextColumn::make('donatur.name')
-                    ->badge()
-                    ->color('primary')
-                    ->searchable(),
-                TextColumn::make('user.name')
-                    ->badge()
-                    ->color('info')
-                    ->searchable(),
+                TextColumn::make('donatur.name')->searchable(),
+                TextColumn::make('user.name')->searchable(),
                 TextColumn::make('amount')
-                    ->numeric()
+                    ->formatStateUsing(
+                        fn ($record) => Number::currency(
+                            $record->amount,
+                            in: 'IDR',
+                            locale: 'id',
+                            precision: 0,
+                        ),
+                    )
                     ->color('success')
                     ->sortable(),
-                TextColumn::make('type')
-                    ->badge()
-                    ->color(fn ($state) => $state === 'infak-kotak' ? 'success' : 'warning')
-                    ->searchable(),
-                TextColumn::make('proof_file')
-                    ->label('Proof')
-                    ->url(fn ($record) => $record->proof_file)
-                    ->openUrlInNewTab()
-                    ->icon('heroicon-o-photo')
-                    ->color('primary'),
+                ImageColumn::make('proof_file')->label('Proof'),
+
                 TextColumn::make('created_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-                TextColumn::make('updated_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
+                    ->since('Asia/Jayapura')
+                    ->badge()
+                    ->color('warning')
+                    ->sortable(),
             ])
             ->filters([
                 //
             ])
-            ->recordActions([
-                ViewAction::make(),
-                EditAction::make(),
-            ])
+            ->recordActions([EditAction::make()])
             ->toolbarActions([
-                BulkActionGroup::make([
-                    DeleteBulkAction::make(),
-                ]),
+                BulkActionGroup::make([DeleteBulkAction::make()]),
             ]);
     }
 }
