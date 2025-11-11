@@ -41,13 +41,13 @@ class TransactionForm
                                 ->required()
                                 ->numeric()
                                 ->placeholder('Nominal donasi'),
-                            Select::make('type')
-                                ->options(\App\Enums\DonationType::class)
-                                ->native(false)
-                                ->default('infak-kotak')
-                                ->required()
-                                ->placeholder('Jenis donasi'),
-                        ])->columns(2),
+                            // Select::make('type')
+                            //     ->options(\App\Enums\DonationType::class)
+                            //     ->native(false)
+                            //     ->default('infak-kotak')
+                            //     ->required()
+                            //     ->placeholder('Jenis donasi'),
+                        ])->columns(1),
                     FileUpload::make('proof_file')
                         ->image()
                         ->required()
