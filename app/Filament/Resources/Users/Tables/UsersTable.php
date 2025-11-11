@@ -13,6 +13,8 @@ class UsersTable
     public static function configure(Table $table): Table
     {
         return $table
+            ->defaultSort('desc')
+            ->searchable(false)
             ->columns([
                 TextColumn::make('name')
                     ->searchable()
@@ -24,19 +26,19 @@ class UsersTable
                     ->color('info'),
                 TextColumn::make('role')
                     ->badge()
-                    ->color(fn ($state) => $state === 'admin' ? 'success' : 'warning')
+                    ->color(
+                        fn ($state) => $state === 'admin'
+                            ? 'success'
+                            : 'warning',
+                    )
                     ->searchable(),
             ])
             ->filters([
                 //
             ])
-            ->recordActions([
-                EditAction::make(),
-            ])
+            ->recordActions([EditAction::make()])
             ->toolbarActions([
-                BulkActionGroup::make([
-                    DeleteBulkAction::make(),
-                ]),
+                BulkActionGroup::make([DeleteBulkAction::make()]),
             ]);
     }
 }

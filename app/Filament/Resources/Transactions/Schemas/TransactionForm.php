@@ -33,7 +33,8 @@ class TransactionForm
                                 ->searchable()
                                 ->preload()
                                 ->placeholder('Pilih donatur'),
-                        ])->columns(Auth::user()->isAdmin() ? 2 : 1),
+                        ])
+                        ->columns(Auth::user()->isAdmin() ? 2 : 1),
                     Grid::make()
                         ->schema([
                             TextInput::make('amount')
@@ -47,7 +48,8 @@ class TransactionForm
                             //     ->default('infak-kotak')
                             //     ->required()
                             //     ->placeholder('Jenis donasi'),
-                        ])->columns(1),
+                        ])
+                        ->columns(1),
                     FileUpload::make('proof_file')
                         ->image()
                         ->required()

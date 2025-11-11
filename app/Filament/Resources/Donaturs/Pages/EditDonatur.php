@@ -4,7 +4,6 @@ namespace App\Filament\Resources\Donaturs\Pages;
 
 use App\Filament\Resources\Donaturs\DonaturResource;
 use Filament\Actions\DeleteAction;
-use Filament\Actions\ViewAction;
 use Filament\Resources\Pages\EditRecord;
 
 class EditDonatur extends EditRecord
@@ -13,9 +12,6 @@ class EditDonatur extends EditRecord
 
     protected function getHeaderActions(): array
     {
-        return [
-            ViewAction::make(),
-            DeleteAction::make(),
-        ];
+        return [DeleteAction::make()];
     }
 }
