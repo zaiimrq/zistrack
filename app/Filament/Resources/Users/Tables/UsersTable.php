@@ -13,23 +13,23 @@ class UsersTable
     public static function configure(Table $table): Table
     {
         return $table
-            ->defaultSort('desc')
+            ->defaultSort(column: "id", direction: "desc")
             ->searchable(false)
             ->columns([
-                TextColumn::make('name')
+                TextColumn::make("name")
                     ->searchable()
-                    ->icon('heroicon-o-user')
-                    ->color('primary'),
-                TextColumn::make('email')
-                    ->label('Email address')
+                    ->icon("heroicon-o-user")
+                    ->color("primary"),
+                TextColumn::make("email")
+                    ->label("Email address")
                     ->searchable()
-                    ->color('info'),
-                TextColumn::make('role')
+                    ->color("info"),
+                TextColumn::make("role")
                     ->badge()
                     ->color(
-                        fn ($state) => $state === 'admin'
-                            ? 'success'
-                            : 'warning',
+                        fn($state) => $state === "admin"
+                            ? "success"
+                            : "warning",
                     )
                     ->searchable(),
             ])

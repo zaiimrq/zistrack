@@ -13,18 +13,18 @@ class DonatursTable
     public static function configure(Table $table): Table
     {
         return $table
-            ->defaultSort('desc')
+            ->defaultSort(column: "id", direction: "desc")
             ->searchable(false)
             ->columns([
-                TextColumn::make('user.name')
+                TextColumn::make("user.name")
                     ->badge()
-                    ->color('primary')
+                    ->color("primary")
                     ->searchable(),
-                TextColumn::make('name')->searchable()->icon('heroicon-o-user'),
-                TextColumn::make('phone')->numeric()->color('info')->sortable(),
-                TextColumn::make('address')
+                TextColumn::make("name")->searchable()->icon("heroicon-o-user"),
+                TextColumn::make("phone")->numeric()->color("info")->sortable(),
+                TextColumn::make("address")
                     ->badge()
-                    ->color('warning')
+                    ->color("warning")
                     ->searchable(),
             ])
             ->filters([
