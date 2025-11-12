@@ -15,7 +15,7 @@ class TransactionsTable
     public static function configure(Table $table): Table
     {
         return $table
-            ->defaultSort('desc')
+            ->defaultSort(column: 'id', direction: 'desc')
             ->searchable(false)
             ->columns([
                 TextColumn::make('donatur.name')->searchable(),
