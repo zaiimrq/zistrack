@@ -3,10 +3,8 @@
 namespace App\Filament\Widgets;
 
 use App\Models\Transaction;
-use App\Models\User;
 use Filament\Widgets\StatsOverviewWidget as BaseStatsOverviewWidget;
 use Filament\Widgets\StatsOverviewWidget\Stat;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Number;
 
 class StatsOverviewWidget extends BaseStatsOverviewWidget
@@ -20,8 +18,7 @@ class StatsOverviewWidget extends BaseStatsOverviewWidget
 
     protected function getStats(): array
     {
-        $user = Auth::user();
-        $query = Transaction::query()->withUser($user->isUser() ? $user : null);
+        $query = Transaction::query()->withUser();
 
         $thisMonthIncome = $query->clone()->thisMonth()->sum('amount');
         $lastMonthIncome = $query->clone()->lastMonth()->sum('amount');
@@ -31,10 +28,7 @@ class StatsOverviewWidget extends BaseStatsOverviewWidget
                 thisMonthIncome: $thisMonthIncome,
                 lastMonthIncome: $lastMonthIncome,
             ),
-            $this->renderTargetStat(
-                user: $user,
-                thisMonthIncome: $thisMonthIncome,
-            ),
+            $this->renderTargetStat(),
         ];
     }
 
@@ -56,11 +50,14 @@ class StatsOverviewWidget extends BaseStatsOverviewWidget
             ->descriptionIcon($icon);
     }
 
-    private function renderTargetStat(User $user, int $thisMonthIncome): Stat
+    private function renderTargetStat(): Stat
     {
-        $target = $user->isAdmin()
-            ? User::query()->sum('target')
-            : $user->target;
+        $user = filament()->auth()->user();
+
+        $target = match (true) {
+            $user->isUser() => $user->target,
+            default => $user->sum('target'),
+        };
 
         return Stat::make('Target', $this->formatCurrency($target))
             ->label('Monthly Target')
@@ -70,6 +67,6 @@ class StatsOverviewWidget extends BaseStatsOverviewWidget
 
     private function formatCurrency(int $amount): string
     {
-        return Number::currency($amount, 'IDR', 'id', 0);
+        return Number::currency($amount, precision: 0);
     }
 }

@@ -8,6 +8,7 @@ use Filament\Support\Facades\FilamentAsset;
 use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Vite;
+use Illuminate\Support\Number;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -26,6 +27,8 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         $this->configureSomething();
+        Number::useLocale('id');
+        Number::useCurrency('IDR');
     }
 
     private function configureSomething(): void
@@ -40,7 +43,10 @@ class AppServiceProvider extends ServiceProvider
         DB::prohibitDestructiveCommands(app()->isProduction());
 
         FilamentAsset::register([
-            Js::make('apex-script', Vite::asset('resources/js/apex.js'))->module(),
+            Js::make(
+                'apex-script',
+                Vite::asset('resources/js/apex.js'),
+            )->module(),
         ]);
     }
 }

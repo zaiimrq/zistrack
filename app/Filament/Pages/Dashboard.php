@@ -18,11 +18,19 @@ class Dashboard extends Page
 
     protected function getHeaderActions(): array
     {
-        return [
-            Action::make('create-transaction')
-                ->label('Create Transaction')
-                ->url(route('filament.dashboard.resources.transactions.create')),
-        ];
+        $user = filament()->auth()->user();
+
+        return $user->isLead()
+            ? []
+            : [
+                Action::make('create-transaction')
+                    ->label('Create Transaction')
+                    ->url(
+                        route(
+                            'filament.dashboard.resources.transactions.create',
+                        ),
+                    ),
+            ];
     }
 
     protected function getHeaderWidgets(): array

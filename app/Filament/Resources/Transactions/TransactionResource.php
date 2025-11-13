@@ -6,7 +6,6 @@ use App\Filament\Resources\Transactions\Pages\CreateTransaction;
 use App\Filament\Resources\Transactions\Pages\EditTransaction;
 use App\Filament\Resources\Transactions\Pages\ListTransactions;
 use App\Filament\Resources\Transactions\Schemas\TransactionForm;
-use App\Filament\Resources\Transactions\Schemas\TransactionInfolist;
 use App\Filament\Resources\Transactions\Tables\TransactionsTable;
 use App\Models\Transaction;
 use BackedEnum;
@@ -14,6 +13,7 @@ use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
 
 class TransactionResource extends Resource
 {
@@ -24,11 +24,6 @@ class TransactionResource extends Resource
     public static function form(Schema $schema): Schema
     {
         return TransactionForm::configure($schema);
-    }
-
-    public static function infolist(Schema $schema): Schema
-    {
-        return TransactionInfolist::configure($schema);
     }
 
     public static function table(Table $table): Table
@@ -50,5 +45,16 @@ class TransactionResource extends Resource
             'create' => CreateTransaction::route('/create'),
             'edit' => EditTransaction::route('/{record}/edit'),
         ];
+    }
+
+    public static function getEloquentQuery(): Builder
+    {
+        $user = filament()->auth()->user();
+
+        return static::getModel()::query()
+            ->when(
+                $user->isUser(),
+                fn ($query): Builder => $query->whereUserId($user),
+            );
     }
 }

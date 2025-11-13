@@ -2,12 +2,16 @@
 
 namespace App\Filament\Resources\Transactions\Schemas;
 
+use App\Enums\UserRole;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Schemas\Components\Grid;
 use Filament\Schemas\Components\Section;
+use Filament\Schemas\Components\Utilities\Get;
 use Filament\Schemas\Schema;
+use Filament\Support\RawJs;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Auth;
 
 class TransactionForm
@@ -21,13 +25,30 @@ class TransactionForm
                     Grid::make()
                         ->schema([
                             Select::make('user_id')
-                                ->relationship('user', 'name')
+                                ->relationship(
+                                    'user',
+                                    'name',
+                                    modifyQueryUsing: fn (
+                                        Builder $query,
+                                    ): Builder => $query->whereRole(
+                                        UserRole::USER,
+                                    ),
+                                )
                                 ->native(false)
                                 ->required()
                                 ->placeholder('Pilih user')
                                 ->visible(Auth::user()->isAdmin()),
                             Select::make('donatur_id')
-                                ->relationship('donatur', 'name')
+                                ->relationship(
+                                    'donatur',
+                                    'name',
+                                    modifyQueryUsing: fn (
+                                        Builder $query,
+                                        Get $get,
+                                    ): Builder => $query->whereUserId(
+                                        $get('user_id'),
+                                    ),
+                                )
                                 ->native(false)
                                 ->required()
                                 ->searchable()
@@ -38,10 +59,13 @@ class TransactionForm
                     Grid::make()
                         ->schema([
                             TextInput::make('amount')
-                                ->prefix('Rp')
                                 ->required()
+                                ->placeholder('Nominal donasi')
+                                ->mask(RawJs::make('$money($input)'))
+                                ->stripCharacters(',')
                                 ->numeric()
-                                ->placeholder('Nominal donasi'),
+                                ->prefix('Rp.')
+                                ->inputMode('decimal'),
                             // Select::make('type')
                             //     ->options(\App\Enums\DonationType::class)
                             //     ->native(false)
@@ -54,7 +78,6 @@ class TransactionForm
                         ->image()
                         ->required()
                         ->placeholder('Upload bukti transfer')
-                        ->imageEditor()
                         ->directory('proofs')
                         ->downloadable(),
                 ])

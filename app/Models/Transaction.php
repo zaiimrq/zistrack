@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Attributes\Scope;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
 class Transaction extends Model
@@ -42,9 +43,13 @@ class Transaction extends Model
     }
 
     #[Scope]
-    protected function withUser(Builder $query, ?User $user): void
+    protected function withUser(Builder $query): void
     {
-        $query->when($user, fn ($q) => $q->where('user_id', $user->id));
+        $user = Auth::user();
+        match (true) {
+            $user->isUser() => $query->where('user_id', $user->id),
+            default => $query,
+        };
     }
 
     protected static function booted(): void

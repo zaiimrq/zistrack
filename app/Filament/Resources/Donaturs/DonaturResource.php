@@ -6,7 +6,6 @@ use App\Filament\Resources\Donaturs\Pages\CreateDonatur;
 use App\Filament\Resources\Donaturs\Pages\EditDonatur;
 use App\Filament\Resources\Donaturs\Pages\ListDonaturs;
 use App\Filament\Resources\Donaturs\Schemas\DonaturForm;
-use App\Filament\Resources\Donaturs\Schemas\DonaturInfolist;
 use App\Filament\Resources\Donaturs\Tables\DonatursTable;
 use App\Models\Donatur;
 use BackedEnum;
@@ -14,6 +13,7 @@ use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
 
 class DonaturResource extends Resource
 {
@@ -26,11 +26,6 @@ class DonaturResource extends Resource
     public static function form(Schema $schema): Schema
     {
         return DonaturForm::configure($schema);
-    }
-
-    public static function infolist(Schema $schema): Schema
-    {
-        return DonaturInfolist::configure($schema);
     }
 
     public static function table(Table $table): Table
@@ -52,5 +47,16 @@ class DonaturResource extends Resource
             'create' => CreateDonatur::route('/create'),
             'edit' => EditDonatur::route('/{record}/edit'),
         ];
+    }
+
+    public static function getEloquentQuery(): Builder
+    {
+        $user = filament()->auth()->user();
+
+        return static::getModel()::query()
+            ->when(
+                $user->isUser(),
+                fn ($query): Builder => $query->whereUserId($user),
+            );
     }
 }

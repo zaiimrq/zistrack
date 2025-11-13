@@ -23,13 +23,17 @@ class TargetIndicatorWidget extends Widget
     {
         $this->setTarget();
         $this->setCurrent();
-        $this->progress = $this->target > 0 ? ($this->current / $this->target) * 100 : 0;
+        $this->progress =
+            $this->target > 0 ? ($this->current / $this->target) * 100 : 0;
     }
 
     private function setTarget(): void
     {
         $user = filament()->auth()->user();
-        $this->target = $user->isAdmin() ? $user->sum('target') : $user->target;
+        $this->target = match (true) {
+            $user->isUser() => $user->target,
+            default => $user->sum('target'),
+        };
     }
 
     private function setCurrent(): void
@@ -37,7 +41,7 @@ class TargetIndicatorWidget extends Widget
         $user = filament()->auth()->user();
         $this->current = Transaction::query()
             ->thisMonth()
-            ->withUser($user->isAdmin() ? null : $user)
+            ->withUser()
             ->sum('amount');
     }
 }

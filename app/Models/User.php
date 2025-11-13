@@ -4,32 +4,32 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;use App\Enums\UserRole;
 use App\Enums\UserRole;
-use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Foundation\Auth\User as Authenticatable;
 use Filament\Models\Contracts\FilamentUser;
 use Filament\Panel;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class User extends Authenticatable implements FilamentUser
 {
     public $timestamps = false;
 
     protected $fillable = [
-        "name",
-        "email",
-        "password",
-        "role",
-        "google_id",
-        "target",
+        'name',
+        'email',
+        'password',
+        'role',
+        'google_id',
+        'target',
     ];
 
-    protected $hidden = ["password", "remember_token"];
+    protected $hidden = ['password', 'remember_token'];
 
     protected function casts(): array
     {
         return [
-            "email_verified_at" => "datetime",
-            "password" => "hashed",
-            "role" => UserRole::class,
+            'email_verified_at' => 'datetime',
+            'password' => 'hashed',
+            'role' => UserRole::class,
         ];
     }
 
@@ -46,6 +46,11 @@ class User extends Authenticatable implements FilamentUser
     public function isUser(): bool
     {
         return $this->role === UserRole::USER;
+    }
+
+    public function isLead(): bool
+    {
+        return $this->role === UserRole::LEAD;
     }
 
     public function donaturs(): HasMany
