@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Transactions;
 
+use App\Enums\TransactionStatus;
 use App\Filament\Resources\Transactions\Pages\CreateTransaction;
 use App\Filament\Resources\Transactions\Pages\EditTransaction;
 use App\Filament\Resources\Transactions\Pages\ListTransactions;
@@ -54,7 +55,16 @@ class TransactionResource extends Resource
         return static::getModel()::query()
             ->when(
                 $user->isUser(),
-                fn ($query): Builder => $query->whereUserId($user),
+                fn ($query): Builder => $query->where('user_id', $user->id),
             );
+    }
+
+    public static function getNavigationBadge(): ?string
+    {
+        $pendingCount = static::getModel()::query()
+            ->whereStatus(TransactionStatus::Pending)
+            ->count();
+
+        return $pendingCount > 0 ? $pendingCount : null;
     }
 }

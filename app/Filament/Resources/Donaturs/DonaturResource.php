@@ -56,7 +56,7 @@ class DonaturResource extends Resource
         return static::getModel()::query()
             ->when(
                 $user->isUser(),
-                fn ($query): Builder => $query->whereUserId($user),
+                fn ($query): Builder => $query->where('user_id', $user->id),
             );
     }
 }

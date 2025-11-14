@@ -2,9 +2,9 @@
 
 namespace App\Filament\Resources\Transactions\Tables;
 
+use App\Models\Transaction;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
-use Filament\Actions\EditAction;
 use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
@@ -16,10 +16,11 @@ class TransactionsTable
     {
         return $table
             ->defaultSort(column: 'id', direction: 'desc')
-            ->searchable(false)
             ->columns([
                 TextColumn::make('donatur.name')->searchable(),
-                TextColumn::make('user.name')->searchable(),
+                TextColumn::make('user.name')
+                    ->hidden(filament()->auth()->user()->isUser())
+                    ->searchable(),
                 TextColumn::make('amount')
                     ->formatStateUsing(
                         fn ($record) => Number::currency(
@@ -29,20 +30,20 @@ class TransactionsTable
                             precision: 0,
                         ),
                     )
-                    ->color('success')
-                    ->sortable(),
+                    ->color('success'),
                 ImageColumn::make('proof_file')->label('Proof'),
 
-                TextColumn::make('created_at')
-                    ->since('Asia/Jayapura')
+                TextColumn::make('created_at')->since('Asia/Jayapura'),
+                TextColumn::make('status')
                     ->badge()
-                    ->color('warning')
-                    ->sortable(),
+                    ->tooltip(
+                        fn (Transaction $record): ?string => $record->note,
+                    ),
             ])
             ->filters([
                 //
             ])
-            ->recordActions([EditAction::make()])
+            ->recordActions([])
             ->toolbarActions([
                 BulkActionGroup::make([DeleteBulkAction::make()]),
             ]);

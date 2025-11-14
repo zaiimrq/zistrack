@@ -5,6 +5,7 @@ namespace App\Providers;
 use Carbon\CarbonImmutable;
 use Filament\Support\Assets\Js;
 use Filament\Support\Facades\FilamentAsset;
+use Filament\Support\Facades\FilamentTimezone;
 use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Vite;
@@ -29,6 +30,7 @@ class AppServiceProvider extends ServiceProvider
         $this->configureSomething();
         Number::useLocale('id');
         Number::useCurrency('IDR');
+        FilamentTimezone::set('Asia/Jayapura');
     }
 
     private function configureSomething(): void

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\TransactionStatus;
 use Illuminate\Database\Eloquent\Attributes\Scope;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
@@ -11,12 +12,20 @@ use Illuminate\Support\Facades\Storage;
 
 class Transaction extends Model
 {
-    protected $fillable = ['donatur_id', 'user_id', 'amount', 'proof_file'];
+    protected $fillable = [
+        'donatur_id',
+        'user_id',
+        'amount',
+        'proof_file',
+        'status',
+        'note',
+    ];
 
     protected function casts(): array
     {
         return [
             'amount' => 'decimal:0',
+            'status' => TransactionStatus::class,
         ];
     }
 
@@ -28,6 +37,12 @@ class Transaction extends Model
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
+    }
+
+    #[Scope]
+    protected function approved(Builder $query): void
+    {
+        $query->whereStatus(TransactionStatus::Approve);
     }
 
     #[Scope]

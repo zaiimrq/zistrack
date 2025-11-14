@@ -18,7 +18,7 @@ class StatsOverviewWidget extends BaseStatsOverviewWidget
 
     protected function getStats(): array
     {
-        $query = Transaction::query()->withUser();
+        $query = Transaction::query()->withUser()->approved();
 
         $thisMonthIncome = $query->clone()->thisMonth()->sum('amount');
         $lastMonthIncome = $query->clone()->lastMonth()->sum('amount');

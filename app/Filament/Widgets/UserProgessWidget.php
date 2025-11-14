@@ -17,7 +17,10 @@ class UserProgessWidget extends Widget
     {
         return [
             'users' => User::withSum('transactions as current', 'amount')
-                ->whereRelation('transactions', fn ($query) => $query->thisMonth())
+                ->whereRelation(
+                    'transactions',
+                    fn ($query) => $query->thisMonth()->approved(),
+                )
                 ->orDoesntHave('transactions')
                 ->whereRole('user')
                 ->get(),
@@ -26,8 +29,6 @@ class UserProgessWidget extends Widget
 
     private function getCurrentIncome(User $user): float|int
     {
-        return $user->transactions()
-            ->thisMonth()
-            ->sum('amount');
+        return $user->transactions()->thisMonth()->sum('amount');
     }
 }

@@ -46,7 +46,7 @@ class TransactionForm
                                         Builder $query,
                                         Get $get,
                                     ): Builder => $query->whereUserId(
-                                        $get('user_id'),
+                                        $get('user_id') ?? Auth::user()->id,
                                     ),
                                 )
                                 ->native(false)
@@ -56,24 +56,14 @@ class TransactionForm
                                 ->placeholder('Pilih donatur'),
                         ])
                         ->columns(Auth::user()->isAdmin() ? 2 : 1),
-                    Grid::make()
-                        ->schema([
-                            TextInput::make('amount')
-                                ->required()
-                                ->placeholder('Nominal donasi')
-                                ->mask(RawJs::make('$money($input)'))
-                                ->stripCharacters(',')
-                                ->numeric()
-                                ->prefix('Rp.')
-                                ->inputMode('decimal'),
-                            // Select::make('type')
-                            //     ->options(\App\Enums\DonationType::class)
-                            //     ->native(false)
-                            //     ->default('infak-kotak')
-                            //     ->required()
-                            //     ->placeholder('Jenis donasi'),
-                        ])
-                        ->columns(1),
+                    TextInput::make('amount')
+                        ->required()
+                        ->placeholder('Nominal donasi')
+                        ->mask(RawJs::make('$money($input)'))
+                        ->stripCharacters(',')
+                        ->numeric()
+                        ->prefix('Rp.')
+                        ->inputMode('decimal'),
                     FileUpload::make('proof_file')
                         ->image()
                         ->required()

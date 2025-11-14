@@ -40,8 +40,9 @@ class TargetIndicatorWidget extends Widget
     {
         $user = filament()->auth()->user();
         $this->current = Transaction::query()
-            ->thisMonth()
+            ->approved()
             ->withUser()
+            ->thisMonth()
             ->sum('amount');
     }
 }
