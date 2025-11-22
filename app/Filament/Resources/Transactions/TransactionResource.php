@@ -35,16 +35,16 @@ class TransactionResource extends Resource
     public static function getRelations(): array
     {
         return [
-            //
-        ];
+                //
+            ];
     }
 
     public static function getPages(): array
     {
         return [
-            'index' => ListTransactions::route('/'),
-            'create' => CreateTransaction::route('/create'),
-            'edit' => EditTransaction::route('/{record}/edit'),
+            "index" => ListTransactions::route("/"),
+            "create" => CreateTransaction::route("/create"),
+            "edit" => EditTransaction::route("/{record}/edit"),
         ];
     }
 
@@ -52,19 +52,26 @@ class TransactionResource extends Resource
     {
         $user = filament()->auth()->user();
 
-        return static::getModel()::query()
+        return static::getModel()
+            ::query()
             ->when(
                 $user->isUser(),
-                fn ($query): Builder => $query->where('user_id', $user->id),
+                fn($query): Builder => $query->where("user_id", $user->id),
             );
     }
 
     public static function getNavigationBadge(): ?string
     {
-        $pendingCount = static::getModel()::query()
+        $pendingCount = static::getModel()
+            ::query()
             ->whereStatus(TransactionStatus::Pending)
             ->count();
 
         return $pendingCount > 0 ? $pendingCount : null;
+    }
+
+    public static function getNavigationBadgeColor(): string|array|null
+    {
+        return "warning";
     }
 }
