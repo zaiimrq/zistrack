@@ -33,7 +33,7 @@ class TransactionsTable
                     ->color('success'),
                 ImageColumn::make('proof_file')->label('Proof'),
 
-                TextColumn::make('created_at')->since('Asia/Jayapura'),
+                TextColumn::make('created_at')->date(format: 'd M Y'),
                 TextColumn::make('status')
                     ->badge()
                     ->tooltip(
